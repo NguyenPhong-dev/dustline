@@ -12,7 +12,7 @@ Dustline is inspired by classic bomb-defusal shooters such as Counter-Strike. It
 
 **In your browser:** go to https://nguyenphong-dev.github.io/dustline/. There is nothing to install, and it works on phones too.
 
-**Mac app:** download `Dustline-1.0.0-mac-arm64.zip` from [Releases](https://github.com/NguyenPhong-dev/dustline/releases/latest), unzip it and drag Dustline into Applications. It runs on Apple Silicon Macs (M1 and later). The app is not notarized by Apple, so macOS blocks it the first time: open System Settings → Privacy & Security, scroll down and click **Open Anyway**. If macOS says the app "is damaged" instead, run `xattr -dr com.apple.quarantine /Applications/Dustline.app` in Terminal and open it again.
+**Mac app:** download the zip for your Mac from [Releases](https://github.com/NguyenPhong-dev/dustline/releases/latest): `Dustline-1.0.0-mac-arm64.zip` for Apple Silicon (M1 and later) or `Dustline-1.0.0-mac-x64.zip` for Intel. Apple menu → About This Mac shows which one you have. Unzip it and drag Dustline into Applications. The app is not notarized by Apple, so macOS blocks it the first time: open System Settings → Privacy & Security, scroll down and click **Open Anyway**. If macOS says the app "is damaged" instead, run `xattr -dr com.apple.quarantine /Applications/Dustline.app` in Terminal and open it again.
 
 **Offline in a browser:** click Code → Download ZIP, unzip it and open `index.html` in Chrome, Edge, Firefox or Safari. three.js and the fonts are bundled, so no internet connection is needed.
 
