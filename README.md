@@ -2,7 +2,7 @@
 
 A free, open-source 5v5 tactical shooter that runs in any modern browser. Pick a side, buy your gear, and play bomb defusal rounds against bots on a desert map. Desktop and phones are both supported.
 
-**[Play in your browser](https://nguyenphong-dev.github.io/dustline/)** · **[Download the Mac app](https://github.com/NguyenPhong-dev/dustline/releases/latest)**
+**[Play in your browser](https://nguyenphong-dev.github.io/dustline/)** · **[Download for Mac or Windows](https://github.com/NguyenPhong-dev/dustline/releases/latest)**
 
 ![Dustline gameplay](docs/screenshot.jpg)
 
@@ -14,9 +14,13 @@ Dustline is inspired by classic bomb-defusal shooters such as Counter-Strike. It
 
 **Mac app:** download the zip for your Mac from [Releases](https://github.com/NguyenPhong-dev/dustline/releases/latest): `Dustline-1.0.0-mac-arm64.zip` for Apple Silicon (M1 and later) or `Dustline-1.0.0-mac-x64.zip` for Intel. Apple menu → About This Mac shows which one you have. Unzip it and drag Dustline into Applications. The app is not notarized by Apple, so macOS blocks it the first time: open System Settings → Privacy & Security, scroll down and click **Open Anyway**. If macOS says the app "is damaged" instead, run `xattr -dr com.apple.quarantine /Applications/Dustline.app` in Terminal and open it again.
 
+**Windows app:** download `Dustline-1.0.0-win-x64.zip` from [Releases](https://github.com/NguyenPhong-dev/dustline/releases/latest), right-click it and choose **Extract All**, then open the extracted Dustline folder and run `Dustline.exe`. It runs on 64-bit Windows 10 and 11. The app is not signed, so Windows may say "Windows protected your PC" the first time: click **More info**, then **Run anyway**. Press F11 for fullscreen and Alt+F4 to quit.
+
 **Offline in a browser:** click Code → Download ZIP, unzip it and open `index.html` in Chrome, Edge, Firefox or Safari. three.js and the fonts are bundled, so no internet connection is needed.
 
 **Build the Mac app yourself:** run `desktop/build-mac.sh`, or `desktop/build-mac.sh x64` for an Intel Mac. It needs no Node.js or npm. The script downloads the official Electron 44 release (about 124 MB), checks its SHA-256 checksum, adds the game and builds `desktop/dist/Dustline.app`. Drag that into Applications. The desktop edition opens in its own window, remembers its size, has F11 and Ctrl+Cmd+F fullscreen, and a Quit button in the menu. The script signs the app only for the Mac that built it. To hand out copies without the security warning, sign and notarize it with an Apple Developer ID.
+
+**Build the Windows app yourself:** on macOS or Linux, run `desktop/build-windows.sh`, or `desktop/build-windows.sh arm64` for Windows on Arm. The script downloads the official Electron release for Windows, checks its SHA-256 checksum, adds the game and writes the `desktop/dist/win-x64/Dustline` folder and a zip of it. If Node.js 20 or later is installed, it also gives `Dustline.exe` the Dustline icon and file details with the [resedit](https://github.com/jet2jet/resedit-js) library, which it downloads from npm at a fixed version and checks against its published hash. Without Node.js the exe keeps Electron's file icon, but the game window still shows the Dustline icon.
 
 **Host it for others:** the game is plain static files, so any static host works:
 
@@ -79,7 +83,7 @@ index.html        page structure, HUD and menus
 css/style.css     all styling
 css/fonts.css     bundled Saira fonts (fonts/, SIL Open Font License)
 lib/three.min.js  three.js r149 (MIT)
-desktop/          Electron wrapper (main.js, preload.js), icon and build-mac.sh
+desktop/          Electron wrapper (main.js, preload.js), icons, build-mac.sh and build-windows.sh
 js/core.js        shared helpers, settings, input state
 js/audio.js       WebAudio sound synthesis
 js/textures.js    canvas-painted textures
@@ -115,6 +119,8 @@ To check a built desktop app without touching the mouse, run it with `--selftest
 ```bash
 desktop/dist/Dustline.app/Contents/MacOS/Electron --selftest=/tmp/dustline-check
 ```
+
+On Windows, open a Command Prompt in the Dustline folder and run `Dustline.exe --selftest=C:\dustline-check`.
 
 ## License
 

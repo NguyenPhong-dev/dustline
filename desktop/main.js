@@ -13,6 +13,7 @@ const selftestArg = process.argv.find((a) => a.startsWith('--selftest='));
 const selftestDir = selftestArg ? selftestArg.slice('--selftest='.length) : null;
 
 app.setName('Dustline');
+if (process.platform === 'win32') app.setAppUserModelId('io.github.dustline');
 app.setAboutPanelOptions({
   applicationName: 'Dustline',
   applicationVersion: VERSION,
@@ -53,7 +54,7 @@ function createWindow() {
     show: false,
     title: 'Dustline',
     backgroundColor: '#0d0f12',
-    autoHideMenuBar: true,
+    ...(process.platform === 'win32' ? { icon: path.join(__dirname, 'icon.ico') } : {}),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
@@ -95,15 +96,20 @@ function createWindow() {
 }
 
 function buildMenu() {
-  const mac = process.platform === 'darwin';
+  // Windows and Linux get no menu bar: pressing Alt would open it and steal the game's keys.
+  // Alt+F4 quits there, and F11 is handled in createWindow.
+  if (process.platform !== 'darwin') {
+    Menu.setApplicationMenu(null);
+    return;
+  }
   // No Close Window or Reload shortcuts, so a stray Cmd+W or Cmd+R cannot end a match.
   const template = [
-    ...(mac ? [{
+    {
       label: 'Dustline',
       submenu: [{ role: 'about' }, { type: 'separator' }, { role: 'hide' }, { role: 'hideOthers' }, { role: 'unhide' }, { type: 'separator' }, { role: 'quit' }],
-    }] : [{ label: 'Game', submenu: [{ role: 'quit' }] }]),
+    },
     { label: 'View', submenu: [{ role: 'togglefullscreen' }] },
-    { label: 'Window', submenu: [{ role: 'minimize' }, ...(mac ? [{ role: 'zoom' }] : [])] },
+    { label: 'Window', submenu: [{ role: 'minimize' }, { role: 'zoom' }] },
   ];
   Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 }
