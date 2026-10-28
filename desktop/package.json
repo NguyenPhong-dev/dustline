@@ -1,0 +1,9 @@
+{
+  "name": "dustline",
+  "productName": "Dustline",
+  "version": "1.0.0",
+  "description": "Free, open-source 5v5 bomb-defusal shooter against bots.",
+  "main": "main.js",
+  "license": "MIT",
+  "private": true
+}

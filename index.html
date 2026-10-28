@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<title>Dustline</title>
+<meta name="description" content="Dustline is a free, open-source 5v5 tactical shooter that runs in the browser. Plant or defuse the bomb against bots.">
+<link rel="stylesheet" href="css/fonts.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<canvas id="view"></canvas>
+
+<!-- In-game HUD -->
+<div id="hud" hidden>
+  <div id="radarWrap"><canvas id="radar" width="220" height="220"></canvas></div>
+  <div id="money"><span class="cur">$</span><span id="moneyVal">800</span><span id="moneyDelta"></span></div>
+
+  <div id="topbar">
+    <div class="alive ct" id="aliveCT"></div>
+    <div class="score ct"><span class="side">CT</span><b id="scoreCT">0</b></div>
+    <div id="timerBox"><span id="timer">1:55</span><span id="bombTimer" hidden></span></div>
+    <div class="score t"><b id="scoreT">0</b><span class="side">T</span></div>
+    <div class="alive t" id="aliveT"></div>
+  </div>
+  <div id="roundLabel"></div>
+
+  <div id="killfeed"></div>
+
+  <div id="vitals">
+    <div class="vital"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 2h6v7h7v6h-7v7H9v-7H2V9h7z"/></svg><b id="hpVal">100</b></div>
+    <div class="vital"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 3v6c0 5.2-3.4 9.6-8 11-4.6-1.4-8-5.8-8-11V5z"/></svg><b id="arVal">0</b><span id="helmetTag" hidden>+H</span></div>
+    <div id="kitTag" hidden>KIT</div>
+    <div id="bombTag" hidden>C4</div>
+  </div>
+
+  <div id="ammo">
+    <div class="ammo-row"><b id="ammoMag">20</b><span id="ammoRes">/ 120</span></div>
+    <div id="wpnName">Glock</div>
+  </div>
+  <div id="slots"></div>
+
+  <div id="crosshair"><i class="l"></i><i class="r"></i><i class="t"></i><i class="b"></i><i class="d"></i></div>
+  <div id="hitmarker"><i></i><i></i><i></i><i></i></div>
+  <div id="dmgDirs"></div>
+  <div id="centerMsg"></div>
+  <div id="useHint"></div>
+  <div id="progress" hidden><div class="bar"><i id="progressFill"></i></div><span id="progressLabel">Planting</span></div>
+  <div id="banner" hidden><div id="bannerTitle"></div><div id="bannerSub"></div></div>
+  <div id="specLabel" hidden></div>
+  <div id="scope" hidden><div class="lens"></div><i class="h"></i><i class="v"></i></div>
+  <div id="vignette"></div>
+  <div id="dmgFlash"></div>
+  <div id="fps" hidden></div>
+</div>
+
+<!-- Buy menu -->
+<div id="buy" class="overlay" hidden>
+  <div class="buy-panel">
+    <div class="buy-head">
+      <h2>Buy</h2>
+      <div class="buy-money">$<span id="buyMoney">800</span></div>
+      <div class="buy-time" id="buyTime"></div>
+      <button class="x" id="buyClose" aria-label="Close buy menu">Close <kbd>B</kbd></button>
+    </div>
+    <div class="buy-grid" id="buyGrid"></div>
+    <p class="buy-foot">Press the number key or click an item. Weapons you die with are lost.</p>
+  </div>
+</div>
+
+<!-- Scoreboard -->
+<div id="scoreboard" class="overlay pass" hidden>
+  <div class="sb-panel">
+    <div class="sb-team ct"><div class="sb-head"><span>Counter-Terrorists</span><b id="sbScoreCT">0</b></div><table><thead><tr><th>Player</th><th>$</th><th>K</th><th>D</th><th>MVP</th></tr></thead><tbody id="sbCT"></tbody></table></div>
+    <div class="sb-team t"><div class="sb-head"><span>Terrorists</span><b id="sbScoreT">0</b></div><table><thead><tr><th>Player</th><th>$</th><th>K</th><th>D</th><th>MVP</th></tr></thead><tbody id="sbT"></tbody></table></div>
+  </div>
+</div>
+
+<!-- Main menu -->
+<div id="menu" class="screen">
+  <div class="menu-panel">
+    <div class="brand">
+      <h1 class="logo">DUSTLINE</h1>
+      <p class="tag">5v5 bomb defusal on a desert map, against bots. Free and open source.</p>
+    </div>
+    <div class="team-pick">
+      <button id="playT" class="team t"><span class="tk">Terrorists</span><span class="ts">Plant the bomb at A or B</span></button>
+      <button id="playCT" class="team ct"><span class="tk">Counter-Terrorists</span><span class="ts">Hold both sites, defuse the bomb</span></button>
+    </div>
+    <div class="opt-row">
+      <span class="lbl">Bot skill</span>
+      <div class="seg" id="diffSeg" role="radiogroup" aria-label="Bot skill">
+        <button data-v="easy" role="radio">Easy</button><button data-v="normal" role="radio">Normal</button><button data-v="hard" role="radio">Hard</button>
+      </div>
+    </div>
+    <div class="opt-row">
+      <span class="lbl">Match</span>
+      <div class="seg" id="lenSeg" role="radiogroup" aria-label="Match length">
+        <button data-v="5" role="radio">First to 5</button><button data-v="8" role="radio">First to 8</button><button data-v="13" role="radio">First to 13</button>
+      </div>
+    </div>
+    <div class="menu-links">
+      <button id="menuSettings">Settings</button>
+      <button id="menuControls">Controls</button>
+      <button id="menuQuit" hidden>Quit</button>
+    </div>
+    <p class="menu-foot">MIT License. Built with three.js. Runs offline from the download.</p>
+  </div>
+</div>
+
+<!-- Pause -->
+<div id="pause" class="screen dim" hidden>
+  <div class="small-panel">
+    <h2>Paused</h2>
+    <button id="resumeBtn" class="primary">Resume</button>
+    <button id="pauseSettings">Settings</button>
+    <button id="pauseControls">Controls</button>
+    <button id="leaveBtn">Leave match</button>
+    <button id="quitBtn" hidden>Quit to desktop</button>
+  </div>
+</div>
+
+<!-- Settings -->
+<div id="settings" class="screen dim" hidden>
+  <div class="small-panel wide">
+    <h2>Settings</h2>
+    <label class="set"><span>Mouse sensitivity <output id="sensOut"></output></span><input type="range" id="sens" min="0.1" max="5" step="0.05"></label>
+    <label class="set"><span>Field of view <output id="fovOut"></output></span><input type="range" id="fov" min="60" max="100" step="1"></label>
+    <label class="set"><span>Volume <output id="volOut"></output></span><input type="range" id="vol" min="0" max="1" step="0.01"></label>
+    <div class="set"><span>Graphics</span><div class="seg" id="qualSeg"><button data-v="low">Low</button><button data-v="medium">Medium</button><button data-v="high">High</button></div></div>
+    <label class="set check"><input type="checkbox" id="fullscreen"><span>Fullscreen <small class="hint" id="fsHint"></small></span></label>
+    <label class="set check"><input type="checkbox" id="invertY"><span>Invert mouse Y</span></label>
+    <label class="set check"><input type="checkbox" id="showFps"><span>Show FPS counter</span></label>
+    <button id="settingsBack" class="primary">Done</button>
+  </div>
+</div>
+
+<!-- Controls -->
+<div id="controls" class="screen dim" hidden>
+  <div class="small-panel wide">
+    <h2>Controls</h2>
+    <div class="keys">
+      <div><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd><span>Move</span></div>
+      <div><kbd>Mouse</kbd><span>Aim</span></div>
+      <div><kbd>Left click</kbd><span>Fire</span></div>
+      <div><kbd>Right click</kbd><span>Scope (sniper), heavy stab (knife)</span></div>
+      <div><kbd>Space</kbd><span>Jump</span></div>
+      <div><kbd>C</kbd><span>Crouch (Ctrl also works)</span></div>
+      <div><kbd>Shift</kbd><span>Walk quietly</span></div>
+      <div><kbd>R</kbd><span>Reload</span></div>
+      <div><kbd>1</kbd>–<kbd>5</kbd><span>Primary, pistol, knife, grenade, bomb</span></div>
+      <div><kbd>Q</kbd><span>Last weapon</span></div>
+      <div><kbd>E</kbd><span>Plant, defuse, pick up</span></div>
+      <div><kbd>G</kbd><span>Drop weapon</span></div>
+      <div><kbd>B</kbd><span>Buy menu</span></div>
+      <div><kbd>Tab</kbd><span>Scoreboard</span></div>
+      <div><kbd>Esc</kbd><span>Pause</span></div>
+    </div>
+    <p class="note">On a phone or tablet, use the on-screen stick to move and drag the right side of the screen to aim.</p>
+    <button id="controlsBack" class="primary">Done</button>
+  </div>
+</div>
+
+<!-- Match over -->
+<div id="matchEnd" class="screen dim" hidden>
+  <div class="small-panel wide">
+    <h2 id="meTitle">Victory</h2>
+    <p id="meSub" class="me-sub"></p>
+    <div id="meStats" class="me-stats"></div>
+    <button id="meAgain" class="primary">Play again</button>
+    <button id="meMenu">Main menu</button>
+  </div>
+</div>
+
+<!-- Click to play prompt -->
+<div id="clickToPlay" class="screen" hidden><button id="ctpBtn" class="primary big">Click to play</button><p id="ctpNote"></p></div>
+
+<!-- Touch controls -->
+<div id="touch" hidden>
+  <div id="stick"><div id="stickKnob"></div></div>
+  <button class="tbtn" id="tFire">FIRE</button>
+  <button class="tbtn" id="tJump">JUMP</button>
+  <button class="tbtn" id="tCrouch">DUCK</button>
+  <button class="tbtn" id="tReload">R</button>
+  <button class="tbtn" id="tSwitch">SWAP</button>
+  <button class="tbtn" id="tAlt">ALT</button>
+  <button class="tbtn" id="tUse">USE</button>
+  <button class="tbtn" id="tBuy">BUY</button>
+  <button class="tbtn" id="tScore">TAB</button>
+  <button class="tbtn" id="tPause">II</button>
+</div>
+
+<div id="loading"><div class="ld-logo">DUSTLINE</div><div class="ld-sub" id="ldSub">Building the map</div></div>
+
+<script src="lib/three.min.js"></script>
+<script src="js/core.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/textures.js"></script>
+<script src="js/map.js"></script>
+<script src="js/physics.js"></script>
+<script src="js/effects.js"></script>
+<script src="js/models.js"></script>
+<script src="js/weapons.js"></script>
+<script src="js/bots.js"></script>
+<script src="js/player.js"></script>
+<script src="js/hud.js"></script>
+<script src="js/touch.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>
