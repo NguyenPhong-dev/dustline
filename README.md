@@ -8,8 +8,6 @@ A free, open-source 5v5 tactical shooter that runs in any modern browser. Pick a
 
 Dustline is inspired by classic bomb-defusal shooters such as Counter-Strike. It is an independent fan project and is not affiliated with Valve. Every model, texture and sound is generated in code, so the game ships no asset files.
 
-The project also includes **[Night Run](getaway.html)**, a separate original arcade car-chase game. It is designed for touch screens and can be added to an iPhone home screen when hosted over HTTPS.
-
 ## Play
 
 **In your browser:** go to https://nguyenphong-dev.github.io/dustline/. There is nothing to install, and it works on phones too.
@@ -19,8 +17,6 @@ The project also includes **[Night Run](getaway.html)**, a separate original arc
 **Windows app:** download `Dustline-1.0.0-win-x64.zip` from [Releases](https://github.com/NguyenPhong-dev/dustline/releases/latest), right-click it and choose **Extract All**, then open the extracted Dustline folder and run `Dustline.exe`. It runs on 64-bit Windows 10 and 11. The app is not signed, so Windows may say "Windows protected your PC" the first time: click **More info**, then **Run anyway**. Press F11 for fullscreen and Alt+F4 to quit.
 
 **Offline in a browser:** click Code → Download ZIP, unzip it and open `index.html` in Chrome, Edge, Firefox or Safari. three.js and the fonts are bundled, so no internet connection is needed.
-
-**Night Run:** open `getaway.html`, steer with the left/right arrows or A/D on desktop, and hold Space to drift. On a phone, use the on-screen arrows and Drift button. For offline play and Add to Home Screen support on iPhone, open the game from an HTTPS host, then use Safari's Share menu → Add to Home Screen.
 
 **Build the Mac app yourself:** run `desktop/build-mac.sh`, or `desktop/build-mac.sh x64` for an Intel Mac. It needs no Node.js or npm. The script downloads the official Electron 44 release (about 124 MB), checks its SHA-256 checksum, adds the game and builds `desktop/dist/Dustline.app`. Drag that into Applications. The desktop edition opens in its own window, remembers its size, has F11 and Ctrl+Cmd+F fullscreen, and a Quit button in the menu. The script signs the app only for the Mac that built it. To hand out copies without the security warning, sign and notarize it with an Apple Developer ID.
 
@@ -101,11 +97,6 @@ js/player.js      mouse and keyboard input, cameras
 js/hud.js         HUD, radar, scoreboard, buy menu
 js/touch.js       on-screen controls for phones and tablets
 js/game.js        rendering, rounds, economy, damage, bomb, main loop
-getaway.html      separate Night Run arcade car-chase game
-css/getaway.css   Night Run layout and touch controls
-js/getaway.js     Night Run canvas game and driving logic
-getaway.webmanifest, getaway-sw.js  install and offline support for Night Run
-assets/getaway-icon.svg, assets/getaway-icon-192.png, assets/getaway-icon.png  Night Run home-screen icons
 ```
 
 The scripts are plain ES5/ES2017 files loaded with `<script>` tags. There is no build step, which is why the game also runs straight from the file system.
