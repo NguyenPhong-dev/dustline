@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#11181b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Night Run">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="A fast, original arcade driving escape. Weave through traffic, shake the tail, and see how long you can stay free.">
+  <link rel="manifest" href="getaway.webmanifest">
+  <link rel="apple-touch-icon" href="assets/getaway-icon.png">
+  <link rel="stylesheet" href="css/getaway.css">
+  <title>Night Run — Dustline Arcade</title>
+</head>
+<body>
+  <main class="game-shell">
+    <canvas id="road" aria-label="Arcade car chase game"></canvas>
+    <div class="scanlines" aria-hidden="true"></div>
+    <header class="topline">
+      <a class="back" href="index.html" aria-label="Back to Dustline">← <span>DUSTLINE ARCADE</span></a>
+      <button id="sound" class="icon-button" aria-label="Enable sound" aria-pressed="false" title="Toggle sound">♫</button>
+    </header>
+
+    <section id="intro" class="screen-card">
+      <div class="eyebrow"><i></i> ONE MORE BLOCK</div>
+      <h1>NIGHT<br><em>RUN</em></h1>
+      <p class="intro-copy">The city is closing in. Cut through traffic, keep your speed up, and lose the lights on your tail.</p>
+      <div class="best-line">PERSONAL BEST <strong id="best-start">000000</strong></div>
+      <button id="start" class="start-button">START ENGINE <span>↗</span></button>
+      <p class="hint">STEER WITH <b>← →</b> OR <b>A D</b> · HOLD <b>SPACE</b> TO DRIFT</p>
+    </section>
+
+    <section class="hud" id="hud" hidden>
+      <div class="hud-cell score-cell"><span>DISTANCE</span><strong id="score">000000</strong></div>
+      <div class="hud-cell speed-cell"><span>SPEED</span><strong><b id="speed">0</b><small> MPH</small></strong></div>
+      <div class="heat"><span>TAIL</span><div class="heat-track"><i id="heat-bar"></i></div></div>
+      <div id="toast" class="toast" aria-live="polite" aria-atomic="true"></div>
+    </section>
+
+    <section class="result-card" id="result" hidden>
+      <div class="eyebrow"><i></i> RUN ENDED</div>
+      <h2>CAUGHT<br><em>IN THE GLOW</em></h2>
+      <p>You made it <strong id="final-score">0</strong> meters.</p>
+      <div class="record" id="record" hidden>NEW PERSONAL BEST</div>
+      <button id="retry" class="start-button">RUN IT BACK <span>↗</span></button>
+      <a class="menu-link" href="index.html">BACK TO DUSTLINE</a>
+    </section>
+
+    <div class="touch-controls" id="touch-controls" aria-label="Driving controls">
+      <button class="drive-button" data-steer="-1" aria-label="Steer left">←</button>
+      <button class="drive-button drift-button" data-drift aria-label="Drift">DRIFT</button>
+      <button class="drive-button" data-steer="1" aria-label="Steer right">→</button>
+    </div>
+  </main>
+  <script src="js/getaway.js"></script>
+</body>
+</html>

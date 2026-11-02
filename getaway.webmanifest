@@ -1,0 +1,15 @@
+{
+  "name": "Night Run — Dustline Arcade",
+  "short_name": "Night Run",
+  "description": "A fast arcade driving escape.",
+  "start_url": "./getaway.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#11181b",
+  "theme_color": "#11181b",
+  "icons": [
+    { "src": "assets/getaway-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/getaway-icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
